@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,16 +22,33 @@ public class FollowingCamera : MonoBehaviour
         fieldOfView = camera.fieldOfView;
     }
 
-    // Start is called before the first frame update
+    private void Start()
+    {
+        EventManager.instance.OnEventEmitted += OnEventEmitted;
+    }
+
+    private void OnEventEmitted(EventType type)
+    {
+        switch (type)
+        {
+            case EventType.NextLevel:
+                return;
+            case EventType.LoadLevel:
+                OnInit();
+                return;
+            case EventType.CompleteLevel:
+                Win();
+                return;
+        }
+    }
 
     public void OnInit()
     {
         offset = defaultOffset;
         camera.fieldOfView = fieldOfView;
-
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         transform.position = target.transform.position + offset;

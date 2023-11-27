@@ -1,8 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 public class GameManager : MonoBehaviour
 {
@@ -22,27 +22,30 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        OnInit();   
+        OnInit();
     }
+
 
     public void OnInit()
     {
         LoadLevel(curLevel);
-        player.OnInit();
-        camera.OnInit();
+        //player.OnInit();
+        //camera.OnInit();
         levelText.text = "Level " + (curLevel + 1).ToString();
         UIManager.instance.CloseAllPanel();
     }
     public void LoadLevel(int index)
     {
+        EventManager.instance.EmitLoadLevelEvent();
         Destroy(map);
         map = Instantiate(levels[index]);
     }
 
     public void NextLevel()
     {
+        EventManager.instance.EmitNextLevelEvent();
 
-        player.IncreaseCoin(50);
+        //player.IncreaseCoin(50);
 
         curLevel++;
         if(curLevel <  levels.Count)
@@ -53,8 +56,10 @@ public class GameManager : MonoBehaviour
 
     public void OnWin()
     {
+        EventManager.instance.EmitCompleteLevelEvent();
+
         SoundManager.instance.PlayClip(AudioType.FX_Win);
-        camera.Win();
+        //camera.Win();
         StartCoroutine(openWinPanel());
     }
 

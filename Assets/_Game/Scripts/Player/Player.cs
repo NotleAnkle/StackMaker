@@ -45,6 +45,23 @@ public class Player : MonoBehaviour
         targetPos = transform.position;
         coin = PlayerPrefs.GetInt("coin", 0);
         UIManager.instance.SetCoin(coin);
+        EventManager.instance.OnEventEmitted += OnEventEmitted;
+    }
+
+    private void OnEventEmitted(EventType type)
+    {
+        switch (type)
+        {
+            case EventType.NextLevel:
+                IncreaseCoin(50);
+                return;
+            case EventType.LoadLevel:
+                OnInit();
+                return;
+            case EventType.CompleteLevel:
+                Win();
+                return;
+        }
     }
 
     public void OnInit()
